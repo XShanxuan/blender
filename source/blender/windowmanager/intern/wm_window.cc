@@ -525,8 +525,8 @@ void wm_window_title(wmWindowManager *wm, wmWindow *win)
     str += "]";
   }
 
-  str += " - Blender ";
-  str += BKE_blender_version_string_compact();
+  str += " - 犀智慧 ";
+ // str += BKE_blender_version_string_compact();
 
   GHOST_SetTitle(handle, str.c_str());
 
