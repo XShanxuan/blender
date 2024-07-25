@@ -28,36 +28,84 @@ class TOPBAR_HT_upper_bar(Header):
         window = context.window
         screen = context.screen
 
-        TOPBAR_MT_editor_menus.draw_collapsible(context, layout)
+        bl_label = "Open"
+        bl_space_type = 'VIEW_3D'
+        bl_region_type = 'HEADER'  # 放置在3D视图的顶部，接近Top Bar的位置
 
-        layout.separator()
+        row = layout.row(align=True)
+        # 添加一个大的按钮
+       # layout.scale_y = 2.0  # 增加按钮的高度
+        row.operator("wm.open_mainfile", text="Open", icon='FILE_FOLDER')
+        row.operator("wm.save_mainfile", text="Save", icon='FILE_TICK')
+        row.operator("wm.save_mainfile", text="导入", icon='FILE_TICK')
+        row.operator("wm.save_mainfile", text="Export", icon='FILE_TICK')
+        row.operator("wm.save_mainfile", text="新建2D", icon='FILE_TICK')
 
-        if not screen.show_fullscreen:
-            layout.template_ID_tabs(window, "workspace", new="workspace.add", menu="TOPBAR_MT_workspace_menu")
-        else:
-            layout.operator("screen.back_to_previous", icon='SCREEN_BACK', text="Back to Previous")
+        row.separator()
+
+    #    row.operator("wm.open_mainfile", text="楦", icon='FILE_FOLDER')
+     #   row.operator("wm.save_mainfile", text="线条", icon='FILE_TICK')
+    #    row.operator("wm.save_mainfile", text="版", icon='FILE_TICK')
+    #    row.operator("wm.save_mainfile", text="鞋片", icon='FILE_TICK')
+    #    row.operator("wm.save_mainfile", text="配件", icon='FILE_TICK')
+    #    row.operator("wm.save_mainfile", text="UV", icon='FILE_TICK')
+     #   row.operator("wm.save_mainfile", text="材质编辑", icon='FILE_TICK')
+     #   row.operator("wm.save_mainfile", text="动画", icon='FILE_TICK')
+     #   row.operator("wm.save_mainfile", text="渲染", icon='FILE_TICK')
+ #       layout.separator()
+        row.separator()
+
+ #       if not screen.show_fullscreen:
+        layout.template_ID_tabs(window, "workspace", new="workspace.add", menu="TOPBAR_MT_workspace_menu")
+ #       else:
+  #          layout.operator("screen.back_to_previous", icon='SCREEN_BACK', text="Back to Previous")
 
     def draw_right(self, context):
         layout = self.layout
 
-        window = context.window
-        screen = context.screen
-        scene = window.scene
-
-        # If statusbar is hidden, still show messages at the top
-        if not screen.show_statusbar:
-            layout.template_reports_banner()
-            layout.template_running_jobs()
-
-        # Active workspace view-layer is retrieved through window, not through workspace.
-        layout.template_ID(window, "scene", new="scene.new", unlink="scene.delete")
+        bl_space_type = 'VIEW_3D'
+        bl_region_type = 'HEADER'  # 放置在3D视图的顶部，接近Top Bar的位置
 
         row = layout.row(align=True)
-        row.template_search(
-            window, "view_layer",
-            scene, "view_layers",
-            new="scene.view_layer_add",
-            unlink="scene.view_layer_remove")
+
+        row.operator("wm.open_mainfile", text="前视图")
+        row.operator("wm.open_mainfile", text="后视图")
+        row.operator("wm.open_mainfile", text="左视图")
+        row.operator("wm.open_mainfile", text="右视图")
+        row.operator("wm.open_mainfile", text="顶视图")
+        row.operator("wm.open_mainfile", text="前左视图")
+        row.operator("wm.open_mainfile", text="前右视图")
+        row.operator("wm.open_mainfile", text="后左视图")
+        row.operator("wm.open_mainfile", text="后右视图")
+        row.separator()
+
+        # 添加一个大的按钮
+       # layout.scale_y = 2.0  # 增加按钮的高度
+        row.operator("wm.open_mainfile", text="关于", icon='FILE_FOLDER')
+        row.operator("wm.save_mainfile", text="帮助", icon='FILE_TICK')
+        row.operator("wm.save_mainfile", text="更新", icon='FILE_TICK')
+        
+
+
+
+    #    window = context.window
+    #    screen = context.screen
+    #    scene = window.scene
+
+        # If statusbar is hidden, still show messages at the top
+     #   if not screen.show_statusbar:
+     #       layout.template_reports_banner()
+     #       layout.template_running_jobs()
+
+        # Active workspace view-layer is retrieved through window, not through workspace.
+    #    layout.template_ID(window, "scene", new="scene.new", unlink="scene.delete")
+
+     #   row = layout.row(align=True)
+    #    row.template_search(
+    #        window, "view_layer",
+    #        scene, "view_layers",
+    #        new="scene.view_layer_add",
+   #         unlink="scene.view_layer_remove")
 
 
 class TOPBAR_PT_tool_settings_extra(Panel):
@@ -224,62 +272,6 @@ class TOPBAR_MT_file_cleanup(Menu):
 
         layout.operator("outliner.orphans_purge", text="Purge Unused Data")
         layout.operator("outliner.orphans_manage", text="Manage Unused Data")
-
-
-class TOPBAR_MT_file(Menu):
-    bl_label = "File"
-
-    def draw(self, context):
-        layout = self.layout
-
-        layout.operator_context = 'INVOKE_AREA'
-        layout.menu("TOPBAR_MT_file_new", text="New", text_ctxt=i18n_contexts.id_windowmanager, icon='FILE_NEW')
-        layout.operator("wm.open_mainfile", text="Open...", icon='FILE_FOLDER')
-        layout.menu("TOPBAR_MT_file_open_recent")
-        layout.operator("wm.revert_mainfile")
-        layout.menu("TOPBAR_MT_file_recover")
-
-        layout.separator()
-
-        layout.operator_context = 'EXEC_AREA' if context.blend_data.is_saved else 'INVOKE_AREA'
-        layout.operator("wm.save_mainfile", text="Save", icon='FILE_TICK')
-
-        sub = layout.row()
-        sub.enabled = context.blend_data.is_saved
-        sub.operator("wm.save_mainfile", text="Save Incremental").incremental = True
-
-        layout.operator_context = 'INVOKE_AREA'
-        layout.operator("wm.save_as_mainfile", text="Save As...")
-        layout.operator_context = 'INVOKE_AREA'
-        layout.operator("wm.save_as_mainfile", text="Save Copy...").copy = True
-
-        layout.separator()
-
-        layout.operator_context = 'INVOKE_AREA'
-        layout.operator("wm.link", text="Link...", icon='LINK_BLEND')
-        layout.operator("wm.append", text="Append...", icon='APPEND_BLEND')
-        layout.menu("TOPBAR_MT_file_previews")
-
-        layout.separator()
-
-        layout.menu("TOPBAR_MT_file_import", icon='IMPORT')
-        layout.menu("TOPBAR_MT_file_export", icon='EXPORT')
-        row = layout.row()
-        row.operator("wm.collection_export_all")
-        row.enabled = context.view_layer.has_export_collections
-
-        layout.separator()
-
-        layout.menu("TOPBAR_MT_file_external_data")
-        layout.menu("TOPBAR_MT_file_cleanup")
-
-        layout.separator()
-
-        layout.menu("TOPBAR_MT_file_defaults")
-
-        layout.separator()
-
-        layout.operator("wm.quit_blender", text="Quit", icon='QUIT')
 
 
 class TOPBAR_MT_file_new(Menu):
@@ -867,11 +859,14 @@ classes = (
     TOPBAR_HT_upper_bar,
     TOPBAR_MT_file_context_menu,
     TOPBAR_MT_workspace_menu,
-    TOPBAR_MT_editor_menus,
-    TOPBAR_MT_blender,
-    TOPBAR_MT_blender_system,
-    TOPBAR_MT_file,
-    TOPBAR_MT_file_new,
+ #  TOPBAR_MT_editor_menus,
+ #   TOPBAR_MT_blender,
+ #   TOPBAR_MT_blender_system,
+ #   TOPBAR_MT_files,
+   # TOPBAR_MT_save,
+ ##   TOPBAR_MT_import,
+ #   TOPBAR_MT_new,
+ #   TOPBAR_MT_file_new,
     TOPBAR_MT_file_recover,
     TOPBAR_MT_file_defaults,
     TOPBAR_MT_templates_more,
