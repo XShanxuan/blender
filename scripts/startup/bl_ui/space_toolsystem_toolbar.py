@@ -3777,31 +3777,21 @@ class SEQUENCER_PT_tools_active(ToolSelectPanelHelper, Panel):
 
 
 #侧边栏工具面板
-class VIEW3D_MY_tools_active(ToolSelectPanelHelper, Panel):
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'TOOLS'
-    bl_label = "MYTools"  # not visible
-   # bl_options = {'HIDE_HEADER'}
+#class VIEW3D_MY_tools_active(ToolSelectPanelHelper, Panel):
+ #   bl_space_type = 'VIEW_3D'
+  #  bl_region_type = 'TOOLS'
+   # bl_label = "MYTools"  # not visible
 
-    # Satisfy the `ToolSelectPanelHelper` API.
-  #  keymap_prefix = "3D View Tool:"
-
-    # Default group to use as a fallback.
- #   tool_fallback_id = "builtin.select"
-
-  #  @classmethod
-  #  def tools_from_context(cls, context, mode=None):
- #       if mode is None:
- #           mode = context.mode
-    def draw(self, context):
-        layout = self.layout
-        scene = context.scene
-
+   # def draw(self, context):
+    #    layout = self.layout
+      #  scene = context.scene
         # 添加五个按钮
-        column  = layout.column (align=True)
-        operator = row.operator("gpencil.draw", text="勾画线条", icon='BLENDER')
+    #    col  = layout.column ()
+   #     operator = col.operator("gpencil.draw", text="勾画线条", icon='BLENDER')
      #   operator.button_name = "勾画线条"
-        layout.label(text="This is a line of text.")
+    #    col.label(text="This is a line of text.")
+    #    col.separator()
+    #    operator = col.operator("gpencil.draw", text="勾画线条", icon='BLENDER')
 
 
 
@@ -3810,7 +3800,7 @@ classes = (
     IMAGE_PT_tools_active,
     NODE_PT_tools_active,
     VIEW3D_PT_tools_active,
-   # VIEW3D_MY_tools_active,
+ #   VIEW3D_MY_tools_active,
     SEQUENCER_PT_tools_active,
 )
 
